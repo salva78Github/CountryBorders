@@ -88,11 +88,6 @@ public class CountryTraversalListener implements TraversalListener<Country, Defa
 			map.put(c2, c1);
 		}
 		
-		
-		this.map.put(c1, c2);
-
-		this.map.put(c2, c1);
-
 	}
 
 	@Override
