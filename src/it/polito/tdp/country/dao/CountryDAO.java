@@ -21,7 +21,7 @@ public class CountryDAO {
 		
 		try{
 			c = DBConnect.getInstance().getConnection();
-			ps = c.prepareStatement("SELECT stateabb, ccode, statenme FROM country");
+			ps = c.prepareStatement("SELECT stateabb, ccode, statenme FROM country order by statenme");
 			rs=ps.executeQuery();
 			
 			while(rs.next()){
@@ -58,14 +58,15 @@ public class CountryDAO {
 			ps = c.prepareStatement("SELECT c1.StateNme as c1Name, cont.state1no, cont.state1ab, c2.StateNme as c2Name, cont.state2no, cont.state2ab, cont.year, cont.conttype " +
 									"FROM country c1, country c2, contiguity cont " +
 									"WHERE cont.state1no = c1.CCode " +
-									"AND cont.state2no = c2.CCode");
+									"AND cont.state2no = c2.CCode " +
+									"AND cont.conttype = 1");
 			rs=ps.executeQuery();
 			
 			while(rs.next()){
 				Country c1 = new Country(rs.getString("state1ab"), rs.getInt("state1no"), rs.getString("c1Name"));
 				Country c2 = new Country(rs.getString("state2ab"), rs.getInt("state2no"), rs.getString("c2Name"));
 				System.out.println("<retrieveListaCountryPairAdiacenti> country 1: " + c1);
-				System.out.println("<retrieveListaCountryPairAdiacenti> country 1: " + c2);
+				System.out.println("<retrieveListaCountryPairAdiacenti> country 2: " + c2);
 				CountryPair cp = new CountryPair(c1, c2, rs.getInt("year"), rs.getInt("conttype"));
 				countryPairs.add(cp);
 			}

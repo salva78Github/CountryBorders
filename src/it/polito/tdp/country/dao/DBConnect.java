@@ -1,18 +1,22 @@
 package it.polito.tdp.country.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import javax.sql.DataSource;
+
+import com.mchange.v2.c3p0.DataSources;
 
 import it.polito.tdp.country.exception.CountryBordersException;
 
 public class DBConnect {
 
-	static private final String jdbcUrl = "jdbc:mysql://localhost/dizionario?user=root&password=salva_root";
+	static private final String jdbcUrl = "jdbc:mysql://localhost/countries?user=root&password=salva_root";
 	static private DBConnect instance = null;
-
+	private static DataSource ds;
+	
 	private DBConnect() {
 		instance = this;
 	}
@@ -26,9 +30,19 @@ public class DBConnect {
 	}
 
 	public Connection getConnection() throws CountryBordersException {
+		if(ds==null){
+			try {
+				ds=DataSources.pooledDataSource(DataSources.unpooledDataSource(jdbcUrl));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new CountryBordersException("Cannot get connection " + jdbcUrl, e);
+			}
+		}
+		
 		try {
 
-			Connection conn = DriverManager.getConnection(jdbcUrl);
+			Connection conn = ds.getConnection();
 			return conn;
 
 		} catch (SQLException e) {

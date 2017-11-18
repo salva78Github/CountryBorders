@@ -39,7 +39,7 @@ public class Country {
 	 */
 	@Override
 	public String toString() {
-		return "Country [stateAbb=" + stateAbb + ", code=" + code + ", name=" + name + "]";
+		return stateAbb + " [" + name + "]";
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
